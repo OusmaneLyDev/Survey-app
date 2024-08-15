@@ -31,7 +31,7 @@ async function createSurvey(surveysCollection) {
             }
         ]
     };
-    return await surveysCollection.insertOne(newSurvey);
+    return surveysCollection.insertOne(newSurvey);
 }
 
 async function createQuestion(questionsCollection) {
@@ -40,50 +40,50 @@ async function createQuestion(questionsCollection) {
         category: "Géographie",
         createdAt: new Date()
     };
-    return await questionsCollection.insertOne(newQuestion);
+    return questionsCollection.insertOne(newQuestion);
 }
 
 async function createResponses(responsesCollection, questionId) {
     const newResponses = [
         {
-            questionId,
+            questionId: new ObjectId(questionId),
             responseText: "Madrid",
             isCorrect: true,
             createdAt: new Date()
         },
         {
-            questionId,
+            questionId: new ObjectId(questionId),
             responseText: "Barcelone",
             isCorrect: false,
             createdAt: new Date()
         }
     ];
-    return await responsesCollection.insertMany(newResponses);
+    return responsesCollection.insertMany(newResponses);
 }
 
 async function readResponses(responsesCollection, questionId) {
-    return await responsesCollection.find({ questionId }).toArray();
+    return responsesCollection.find({ questionId: new ObjectId(questionId) }).toArray();
 }
 
 async function updateResponse(responsesCollection, responseId) {
-    return await responsesCollection.updateOne(
-        { _id: responseId },
+    return responsesCollection.updateOne(
+        { _id: new ObjectId(responseId) },
         { $set: { responseText: "Madrid - Espagne" } }
     );
 }
 
 async function deleteResponse(responsesCollection, responseId) {
-    return await responsesCollection.deleteOne({ _id: responseId });
+    return responsesCollection.deleteOne({ _id: new ObjectId(responseId) });
 }
 
 async function main() {
-    const client = new MongoClient(mongoUri);
+    const client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
     try {
         await client.connect();
         console.log('Connecté à MongoDB');
 
         const db = client.db(dbName);
-        
+
         const surveys = db.collection('surveys');
         const questions = db.collection('questions');
         const responses = db.collection('responses');
@@ -101,10 +101,10 @@ async function main() {
         const responsesList = await readResponses(responses, createQuestionResult.insertedId);
         console.log('Réponses récupérées pour la question:', responsesList);
 
-        const updateResponseResult = await updateResponse(responses, createResponsesResult.insertedIds[0]);
+        const updateResponseResult = await updateResponse(responses, responseIds[0]);
         console.log(`Réponse mise à jour : ${updateResponseResult.modifiedCount}`);
 
-        const deleteResponseResult = await deleteResponse(responses, createResponsesResult.insertedIds[1]);
+        const deleteResponseResult = await deleteResponse(responses, responseIds[1]);
         console.log(`Réponse supprimée : ${deleteResponseResult.deletedCount}`);
     } catch (error) {
         console.error('Erreur:', error);

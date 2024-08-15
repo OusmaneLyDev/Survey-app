@@ -38,11 +38,22 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 
     src/
         index.js: Fichier principal contenant le code de l'application.
-        config/
+        src2/
             db.js: Fichier de configuration pour la connexion à la base de données MongoDB.
-        question.js: Gère les opérations CRUD pour les questions.
-        response.js: Gère les opérations CRUD pour les réponses.
-        survey-controller.js: Contient la logique pour les enquêtes.
+
+        question.js:(id: INT, questionText: string, category: string, createdAt: Date)
+            Gère les opérations CRUD pour les questions.
+        response.js: (id: int, responseText: string, responseText: Boolean, createdAt: Date)
+            Gère les opérations CRUD pour les réponses.
+        survey-controller.js: (id: INT, name: string, description: string, createdAt: Date, createdBy: Objet, )
+            Contient la logique pour les enquêtes.
+
+   Leurs fonctions principales:
+
+        create: Crée un module avec les détails fournis.
+        get(): Récupère .
+        updateid): Met à jour un module existant basé sur son id.
+        delete(id): Supprime un module basé sur son id.      
 
 
 5. **Configurez la base de données :**

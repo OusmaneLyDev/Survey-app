@@ -1,9 +1,9 @@
 {
   "name": "abc-survey-app",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "src2/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src2/index.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",

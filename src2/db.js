@@ -1,5 +1,5 @@
 db.reponses.find().pretty();
-// src/db.js
+// src2/db.js
 const { MongoClient } = require('mongodb');
 
 const url = 'mongodb://localhost:27017';

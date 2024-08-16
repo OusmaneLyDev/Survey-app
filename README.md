@@ -77,4 +77,4 @@ npm start
 
 ## Authors
 
-OusmaneLyDev
+[OusmaneLyDev](https://github.com/OusmaneLyDev)

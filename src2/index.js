@@ -77,37 +77,42 @@ async function deleteResponse(responsesCollection, responseId) {
 }
 
 async function main() {
-    const client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    // Suppression des options dépréciées
+    const client = new MongoClient(mongoUri);
+
     try {
         await client.connect();
         console.log('Connecté à MongoDB');
 
         const db = client.db(dbName);
-
         const surveys = db.collection('surveys');
         const questions = db.collection('questions');
         const responses = db.collection('responses');
 
-        const createSurveyResult = await createSurvey(surveys);
-        console.log(`Nouvelle enquête créée avec l'ID : ${createSurveyResult.insertedId}`);
+        try {
+            const createSurveyResult = await createSurvey(surveys);
+            console.log(`Nouvelle enquête créée avec l'ID : ${createSurveyResult.insertedId}`);
 
-        const createQuestionResult = await createQuestion(questions);
-        console.log(`Nouvelle question créée avec l'ID : ${createQuestionResult.insertedId}`);
+            const createQuestionResult = await createQuestion(questions);
+            console.log(`Nouvelle question créée avec l'ID : ${createQuestionResult.insertedId}`);
 
-        const createResponsesResult = await createResponses(responses, createQuestionResult.insertedId);
-        const responseIds = Object.values(createResponsesResult.insertedIds).map(id => id.toString());
-        console.log(`Nouvelles réponses créées avec les IDs : ${responseIds}`);
+            const createResponsesResult = await createResponses(responses, createQuestionResult.insertedId);
+            const responseIds = Object.values(createResponsesResult.insertedIds).map(id => id.toString());
+            console.log(`Nouvelles réponses créées avec les IDs : ${responseIds}`);
 
-        const responsesList = await readResponses(responses, createQuestionResult.insertedId);
-        console.log('Réponses récupérées pour la question:', responsesList);
+            const responsesList = await readResponses(responses, createQuestionResult.insertedId);
+            console.log('Réponses récupérées pour la question:', responsesList);
 
-        const updateResponseResult = await updateResponse(responses, responseIds[0]);
-        console.log(`Réponse mise à jour : ${updateResponseResult.modifiedCount}`);
+            const updateResponseResult = await updateResponse(responses, responseIds[0]);
+            console.log(`Réponse mise à jour : ${updateResponseResult.modifiedCount}`);
 
-        const deleteResponseResult = await deleteResponse(responses, responseIds[1]);
-        console.log(`Réponse supprimée : ${deleteResponseResult.deletedCount}`);
+            const deleteResponseResult = await deleteResponse(responses, responseIds[1]);
+            console.log(`Réponse supprimée : ${deleteResponseResult.deletedCount}`);
+        } catch (error) {
+            console.error('Erreur lors des opérations sur MongoDB:', error);
+        }
     } catch (error) {
-        console.error('Erreur:', error);
+        console.error('Erreur de connexion à MongoDB:', error);
     } finally {
         await client.close();
         console.log('Connexion fermée.');

@@ -5,7 +5,7 @@ const { MongoClient } = require('mongodb');
 const url = 'mongodb://localhost:27017';
 const dbName = 'feedback_app';
 
-const client = new MongoClient(url, { useUnifiedTopology: true });
+const client = new MongoClient(url);
 
 async function connect() {
     try {

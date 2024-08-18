@@ -33,34 +33,33 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 
     npm install
     ```
-
 4. **Structure du Projet :**
 
-    src/
+    src2/
         index.js: Fichier principal contenant le code de l'application.
-        src2/
-            db.js: Fichier de configuration pour la connexion à la base de données MongoDB.
+        src2/config
+            database.js: Fichier de configuration pour la connexion à la base de données MongoDB.
 
 5.  **Modules et Fonctions**
 
 
-question.js
+questionModule.js
 
-    Description: Ce module gère toutes les opérations liées aux questions, y compris la création, la lecture, la mise à jour et la suppression.
+    Description: Ce module gère les opérations CRUD de la collection questions.
     Structure des Données:
         id: ObjectId, identifiant unique pour chaque question.
         questionText: String, le texte de la question.
         category: String, la catégorie de la question.
         createdAt: Date, la date de création de la question.
     Fonctions principales:
-        createQuestion(question): Crée une nouvelle question avec les détails fournis.
-        getQuestions(): Récupère toutes les questions de la base de données.
-        updateQuestion(id, updatedQuestion): Met à jour une question existante basée sur son id.
-        deleteQuestion(id): Supprime une question basée sur son id.
+        addQuestion(question): ajouter une document dans la collection questions.
+        getQuestions(): Affiche toute les documents de la collection questions.
+        updateQuestion(id, updatedQuestion): Met à jour un document sur la collection questions.
+        destroyQuestion(id): Supprime un document dans la collection questions .
 
-response.js
+answerModule.js
 
-    Description: Ce module gère toutes les opérations liées aux réponses.
+    Description: Ce module gère les opérations CRUD de la collection answers.
     Structure des Données:
         id: ObjectId, identifiant unique pour chaque réponse.
         questionId: ObjectId, identifiant de la question associée.
@@ -68,14 +67,14 @@ response.js
         isCorrect: Boolean, indique si la réponse est correcte.
         createdAt: Date, la date de création de la réponse.
     Fonctions principales:
-        createResponse(response): Crée une nouvelle réponse avec les détails fournis.
-        getResponses(): Récupère toutes les réponses.
-        updateResponse(id, updatedResponse): Met à jour une réponse existante basée sur son id.
-        deleteResponse(id): Supprime une réponse basée sur son id.
+        addQuestion(question): ajouter une document dans la collection answers.
+        getQuestions(): Affiche toute les documents de la collection answers.
+        updateQuestion(id, updatedQuestion): Met à jour un document sur la collection answers.
+        destroyQuestion(id): Supprime un document .
 
-survey-controller.js
+surveyModule.js
 
-    Description: Ce module contient la logique pour les enquêtes, combinant les questions et les réponses.
+    Description: Ce module gére les opérations CRUD de la collection surveys.
     Structure des Données:
         id: ObjectId, identifiant unique pour chaque enquête.
         name: String, le nom de l'enquête.
@@ -84,10 +83,10 @@ survey-controller.js
         createdBy: Object, les détails de l'utilisateur ayant créé l'enquête.
         questions: Array, une liste d'ID de questions associées à l'enquête.
     Fonctions principales:
-        createSurvey(survey): Crée une nouvelle enquête avec les détails fournis.
-        getSurveys(): Récupère toutes les enquêtes.
-        updateSurvey(id, updatedSurvey): Met à jour une enquête existante basée sur son id.
-        deleteSurvey(id): Supprime une enquête basée sur son id.    
+       addQuestion(question): ajouter une document dans la collection surveys.
+        getQuestions(): Affiche toute les documents de la collection surveys.
+        updateQuestion(id, updatedQuestion): Met à jour un document sur la collection surveys.
+        destroyQuestion(id): Supprime un document .
 
 
 6. **Configurez la base de données :**

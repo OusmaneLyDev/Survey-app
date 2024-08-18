@@ -1,5 +1,5 @@
 {
-  "name": "abc-survey-app",
+  "name": "feedback_app",
   "version": "1.0.0",
   "main": "src2/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
-    "mongoose": "^6.13.0"
+    "mongoose": "^8.5.3"
   },
   "description": "Survey App est une application JavaScript simple permettant de gérer les fiches d'enquête de satisfaction des clients. L'application utilise une base de données MongoDB pour stocker les données et permet d'effectuer des opérations CRUD (Create, Read, Update, Delete) sur ces fiches.",
   "keywords": [],

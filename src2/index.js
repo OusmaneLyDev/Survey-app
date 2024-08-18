@@ -1,122 +1,85 @@
-const { MongoClient, ObjectId } = require('mongodb');
+const {
+  addSurvey,
+  getSurvey,
+  updateSurvey,
+  destroySurvey,
+} = require("./surveyModule");
+const {
+  addAnswer,
+  getAnswer,
+  updateAnswer,
+  destroyAnswer,
+} = require("./answerModule");
+const {
+  addQuestion,
+  getQuestion,
+  updateQuestion,
+  destroyQuestion,
+} = require("./questionModule");
+const { client } = require("./config/database");
 
-const mongoUri = 'mongodb://localhost:27017'; // URL de connexion à MongoDB
-const dbName = 'feedback_app'; // Nom de la base de données
-
-async function createSurvey(surveysCollection) {
-    const newSurvey = {
-        name: "Nouvelle enquête",
-        description: "Enquête pour mesurer la satisfaction client.",
-        createdAt: new Date(),
-        createdBy: {
-            employeeName: "John Doe",
-            employeeRole: "Responsable"
-        },
-        questions: [
-            {
-                title: "Comment évalueriez-vous notre service globalement?",
-                type: "rating",
-                options: {
-                    minValue: 1,
-                    maxValue: 5,
-                    step: 1
-                },
-                answers: [
-                    { title: "Excellent" },
-                    { title: "Bon" },
-                    { title: "Moyen" },
-                    { title: "Mauvais" },
-                    { title: "Très mauvais" }
-                ]
-            }
-        ]
-    };
-    return surveysCollection.insertOne(newSurvey);
-}
-
-async function createQuestion(questionsCollection) {
-    const newQuestion = {
-        questionText: "Quelle est la capitale de l'Espagne?",
-        category: "Géographie",
-        createdAt: new Date()
-    };
-    return questionsCollection.insertOne(newQuestion);
-}
-
-async function createResponses(responsesCollection, questionId) {
-    const newResponses = [
-        {
-            questionId: new ObjectId(questionId),
-            responseText: "Madrid",
-            isCorrect: true,
-            createdAt: new Date()
-        },
-        {
-            questionId: new ObjectId(questionId),
-            responseText: "Barcelone",
-            isCorrect: false,
-            createdAt: new Date()
-        }
-    ];
-    return responsesCollection.insertMany(newResponses);
-}
-
-async function readResponses(responsesCollection, questionId) {
-    return responsesCollection.find({ questionId: new ObjectId(questionId) }).toArray();
-}
-
-async function updateResponse(responsesCollection, responseId) {
-    return responsesCollection.updateOne(
-        { _id: new ObjectId(responseId) },
-        { $set: { responseText: "Madrid - Espagne" } }
-    );
-}
-
-async function deleteResponse(responsesCollection, responseId) {
-    return responsesCollection.deleteOne({ _id: new ObjectId(responseId) });
+// Fonction pour générer le prochain ID disponible
+async function generateNewId(entity, getMethod) {
+  const entities = await getMethod();
+  if (!entities || entities.length === 0) return 1; // Vérifie si le résultat est `undefined` ou un tableau vide
+  const ids = entities.map((e) => e[`${entity}Id`]);
+  return Math.max(...ids) + 1;
 }
 
 async function main() {
-    // Suppression des options dépréciées
-    const client = new MongoClient(mongoUri);
+  try {
+    // Génération des nouveaux IDs pour chaque entité
+    const newSurveyId = await generateNewId("survey", getSurvey);
+    const newQuestionId = await generateNewId("question", getQuestion);
+    const newAnswerId = await generateNewId("answer", getAnswer);
 
-    try {
-        await client.connect();
-        console.log('Connecté à MongoDB');
+    // Mise à jour des objets avec les nouveaux IDs
+    const survey = {
+      surveyId: newSurveyId,
+      name: "Enquête de Satisfaction 1",
+      description:
+        "Enquête visant à évaluer la satisfaction des clients concernant nos services.",
+      createdAt: "2024-07-25T08:00:00Z",
+      createdBy: {
+        employeeName: "Jane Smith",
+        employeeRole: "Responsable du service client",
+      },
+    };
 
-        const db = client.db(dbName);
-        const surveys = db.collection('surveys');
-        const questions = db.collection('questions');
-        const responses = db.collection('responses');
+    const question = {
+      questionId: newQuestionId,
+      surveyId: newSurveyId,
+      title: "Comment évalueriez-vous notre service ?",
+      type: "rating",
+      option: 1,
+    };
 
-        try {
-            const createSurveyResult = await createSurvey(surveys);
-            console.log(`Nouvelle enquête créée avec l'ID : ${createSurveyResult.insertedId}`);
+    const answer = {
+      answerId: newAnswerId,
+      questionId: newQuestionId,
+      title: "Très satisfait",
+    };
 
-            const createQuestionResult = await createQuestion(questions);
-            console.log(`Nouvelle question créée avec l'ID : ${createQuestionResult.insertedId}`);
+    // Opérations CRUD
+    await addSurvey(survey);
+    await getSurvey();
+    await updateSurvey(newSurveyId, survey);
+    await destroySurvey(newSurveyId);
 
-            const createResponsesResult = await createResponses(responses, createQuestionResult.insertedId);
-            const responseIds = Object.values(createResponsesResult.insertedIds).map(id => id.toString());
-            console.log(`Nouvelles réponses créées avec les IDs : ${responseIds}`);
+    await addAnswer(answer);
+    await updateAnswer(newAnswerId, answer);
+    await getAnswer();
+    await destroyAnswer(newAnswerId);
 
-            const responsesList = await readResponses(responses, createQuestionResult.insertedId);
-            console.log('Réponses récupérées pour la question:', responsesList);
-
-            const updateResponseResult = await updateResponse(responses, responseIds[0]);
-            console.log(`Réponse mise à jour : ${updateResponseResult.modifiedCount}`);
-
-            const deleteResponseResult = await deleteResponse(responses, responseIds[1]);
-            console.log(`Réponse supprimée : ${deleteResponseResult.deletedCount}`);
-        } catch (error) {
-            console.error('Erreur lors des opérations sur MongoDB:', error);
-        }
-    } catch (error) {
-        console.error('Erreur de connexion à MongoDB:', error);
-    } finally {
-        await client.close();
-        console.log('Connexion fermée.');
-    }
+    await addQuestion(question);
+    await getQuestion();
+    await updateQuestion(newQuestionId, question);
+    await destroyQuestion(newQuestionId);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    await client.close();
+  }
 }
 
 main();

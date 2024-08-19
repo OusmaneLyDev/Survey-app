@@ -1,0 +1,72 @@
+const { client } = require("./config/database");
+
+const collectionSurvey = client.db().collection("surveys");
+
+async function generateUniqueSurveyId() {
+  const lastSurvey = await collectionSurvey
+    .find({})
+    .sort({ surveyId: -1 })
+    .limit(1)
+    .toArray();
+  return lastSurvey.length > 0 ? lastSurvey[0].surveyId + 1 : 1;
+}
+
+async function addSurvey(document) {
+  try {
+    document.surveyId = await generateUniqueSurveyId();
+    await collectionSurvey.insertOne(document);
+    console.log(`Le document ${document.surveyId} a été ajouté avec succès.`);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
+
+async function getSurvey() {
+  try {
+    const result = await collectionSurvey.find({}).toArray();
+    console.log("Les résultats:", result);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
+
+async function updateSurvey(surveyId, updateData) {
+  try {
+    const id = parseInt(surveyId, 10);
+    const { _id, ...updateFields } = updateData;
+    const existingSurvey = await collectionSurvey.findOne({ surveyId: id });
+    if (existingSurvey) {
+      await collectionSurvey.updateOne(
+        { surveyId: id },
+        { $set: updateFields }
+      );
+      console.log(`Document ${id} est modifié avec succès.`);
+    } else {
+      console.log(`Erreur: Le document ${id} n'existe pas.`);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
+
+async function destroySurvey(surveyId) {
+  try {
+    const id = parseInt(surveyId, 10);
+    const existingSurvey = await collectionSurvey.findOne({ surveyId: id });
+    if (existingSurvey) {
+      await collectionSurvey.deleteOne({ surveyId: id });
+      console.log(`Document ${id} a été supprimé avec succès.`);
+    } else {
+      console.log(`Erreur: Le document ${id} n'existe pas.`);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
+
+module.exports = {
+  addSurvey,
+  getSurvey,
+  updateSurvey,
+  destroySurvey,
+};

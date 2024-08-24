@@ -13,8 +13,6 @@ Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
 ## Installation
 
-Suivez ces étapes pour configurer le projet sur votre machine locale :
-
 1. **Clonez le repository :**
 
 
@@ -32,17 +30,21 @@ Suivez ces étapes pour configurer le projet sur votre machine locale :
 
 **
     npm install
-    ```
-4. **Structure du Projet :**
 
-    src2/
-        index.js: Fichier principal contenant le code de l'application.
-        src2/config
-            database.js: Fichier de configuration pour la connexion à la base de données MongoDB.
+4. **Configurez la base de données :**
 
-5.  **Modules et Fonctions**
+    - Assurez-vous que MongoDB est en cours d'exécution sur votre machine locale.
+    - Mettez les paramètres de connexion dans `config/database.js`.
 
-**surveyModule.js**
+
+### 5. ***Documentation des Fonctions***
+
+Ce fichier montre comment utiliser les fonctions pour gérer les enquêtes, les questions et les réponses.
+
+
+## Modules et Fonctions
+
+### surveyModule.js
 
 Ce module permet de gérer les opérations CRUD de la collection `surveys`. Il est composé des fonctions suivantes :
 
@@ -161,27 +163,8 @@ Ce module permet de gérer les opérations CRUD de la collection `survey_answers
   - **Paramètres**:
     - `answerId` (int): ID de la réponse à supprimer.
   
-
-
-6. **Configurez la base de données :**
-
-    - Assurez-vous que MongoDB est en cours d'exécution sur votre machine locale.
-    - Mettez les paramètres de connexion dans `config/db.js`.
-
-7. **Description du Code :**
-    Importation des Modules
-    const { MongoClient } = require('mongodb');
-        Le module mongodb est utilisé pour interagir avec la base de données MongoDB.
-
-
-## Utilisation
-
-Pour démarrer l'application, exécutez la commande suivante :
-
-```bash
-npm start 
 ```
 
 ## Authors
 
-[OusmaneLyDev](https://github.com/OusmaneLyDev)
+[Ethman Ly](https://github.com/OusmaneLyDev)

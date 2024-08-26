@@ -11,6 +11,12 @@ async function createQuestion(idQuestion, surveyId, questionText, options) {
             console.log(`Une question avec l'ID ${idQuestion} existe déjà.`);
             return;
         }
+        const existingSurvey = await db.collection('surveys').findOne({id: surveyId });
+        if (!existingSurvey) {
+            console.log(`Une enquette avec l'ID ${surveyId} n'existe pas.`);
+            return;
+        }
+
 
         // Vérification que le tableau options existe et n'est pas vide
         if (!options || options.length === 0) {

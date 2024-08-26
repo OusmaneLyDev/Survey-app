@@ -11,6 +11,11 @@ async function createAnswer(idAnswer, questionId, options) {
             console.log(`Une réponse avec l'ID ${idAnswer} existe déjà.`);
             return;
         }
+        const existingQuestion = await db.collection('questions').findOne({idQuestion: questionId });
+        if (!existingQuestion) {
+            console.log(`Une question avec l'ID ${questionId} n'existe pas.`);
+            return;
+        }
 
         const newAnswer = {
             idAnswer,

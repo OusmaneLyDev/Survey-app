@@ -8,7 +8,7 @@ const { createQuestion, readAllQuestions, readQuestionById, updateQuestion, dele
 connectDB().then(async () => {
     // Gestion des enquêtes
     await insertSurvey({
-        idSurvey: 2,  // Changement d'ID pour éviter les conflits
+        id: 1,  // Changement d'ID pour éviter les conflits
         name: "Enquête de Satisfaction 002",
         description: "Deuxième enquête visant à évaluer la satisfaction des clients.",
         createdAt: "2024-08-13T10:00:00Z",
@@ -33,7 +33,7 @@ connectDB().then(async () => {
     await getAllSurveys();
 
     // Gestion des questions
-    await createQuestion(2, "Quelle est votre satisfaction globale ?", "rating", { minValue: 1, maxValue: 10, step: 1 }); 
+    await createQuestion(2, 1, "rating", { minValue: 1, maxValue: 10, step: 1 }); 
     await readAllQuestions();
     await readQuestionById(2);  // ID corrigé pour correspondre à l'enquête
     await updateQuestion(2, { title: "Comment évalueriez-vous notre service ? (Mise à jour)" }); 
@@ -41,9 +41,7 @@ connectDB().then(async () => {
     await readAllQuestions();
 
     // Gestion des réponses
-    await createAnswer(2, [  // ID corrigé pour correspondre à l'enquête
-        { title: "Très bien" }
-    ]);
+    await createAnswer(2, 2 , { title: "Très bien" } );
     await readAllAnswers();
     await readAnswerById(2);  // ID corrigé pour correspondre à la réponse
     await updateAnswer(2, { title: "Extrêmement satisfait" }); 

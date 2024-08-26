@@ -5,15 +5,16 @@ async function insertSurvey(survey) {
     const collection = db.collection('surveys');
 
     try {
-        const existingSurvey = await collection.findOne({ idSurvey: survey.idSurvey });
+        const existingSurvey = await collection.findOne({ id: survey.id});
         if (existingSurvey) {
-            console.log("Une enquête avec cet idSurvey existe déjà:", survey.idSurvey);
+            console.log("Une enquête avec cet idSurvey existe déjà:");
             return;
         }
 
         // Insérer la nouvelle enquête
         await collection.insertOne(survey);
-        console.log("Enquête insérée avec succès:", survey);
+        // console.log("Enquête insérée avec succès:", survey);
+        console.log("Enquête insérée avec succès:");
 
     } catch (err) {
         console.error("Erreur lors de l'insertion de l'enquête:", err);

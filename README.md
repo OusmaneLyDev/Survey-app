@@ -11,22 +11,26 @@ Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
 ## *Installation*
 
-1. **Clonez le repository :**
-    ```bash
+Suivez ces étapes pour configurer le projet sur votre machine locale :
 
-git clone https://github.com/OusmaneLyDev/Survey-app.git
+1. **Clonez le repository :**
+
+    ```bash
+   git clone https://github.com/OusmaneLyDev/Survey-app.git
+    ```
 
 2. **Accédez au dossier du projet :**
 
     ```bash
-   cd app-survey
+   cd Survey-app
+
     ```
 
 3. **Installez les dépendances :**
 
     ```bash
-    npm install
-    ```
+   npm install
+    ``` 
  
 4. **Configurez la base de données :**
 

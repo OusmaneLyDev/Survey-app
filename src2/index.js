@@ -1,6 +1,6 @@
 const { connectDB, getDB } = require('./config/db');
 
-const { insertSurvey, getAllSurveys, getSurveyById, updateSurvey, deleteSurvey } = require('./surveyModule');
+const { insertSurvey, getAllSurveys, getSurveyById, updateSurvey, deleteSurvey } = require('./surveyModule.js');
 const { createAnswer, readAllAnswers, readAnswerById, updateAnswer, deleteAnswer } = require('./answerModule');
 const { createQuestion, readAllQuestions, readQuestionById, updateQuestion, deleteQuestion } = require('./questionModule');
 
@@ -33,10 +33,10 @@ connectDB().then(async () => {
     await getAllSurveys();
 
     // Gestion des questions
-    await createQuestion(2, "Quelle est votre satisfaction globale ?", "rating", { minValue: 1, maxValue: 10, step: 1 }); // surveyId corrigé
+    await createQuestion(2, "Quelle est votre satisfaction globale ?", "rating", { minValue: 1, maxValue: 10, step: 1 }); 
     await readAllQuestions();
     await readQuestionById(2);  // ID corrigé pour correspondre à l'enquête
-    await updateQuestion(2, { title: "Comment évalueriez-vous notre service ? (Mise à jour)" }); // ID corrigé
+    await updateQuestion(2, { title: "Comment évalueriez-vous notre service ? (Mise à jour)" }); 
     await deleteQuestion(2);
     await readAllQuestions();
 
@@ -46,7 +46,7 @@ connectDB().then(async () => {
     ]);
     await readAllAnswers();
     await readAnswerById(2);  // ID corrigé pour correspondre à la réponse
-    await updateAnswer(2, { title: "Extrêmement satisfait" }); // ID corrigé
+    await updateAnswer(2, { title: "Extrêmement satisfait" }); 
     await deleteAnswer(2);
     await readAllAnswers();
 }).catch(err => {

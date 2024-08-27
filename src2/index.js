@@ -33,7 +33,7 @@ connectDB().then(async () => {
     await getAllSurveys();
 
     // Gestion des questions
-    await createQuestion(2, 1, "rating", { minValue: 1, maxValue: 10, step: 1 }); 
+    await createQuestion(2, 1, "rating", "Qu'avez-vous le plus apprécié dans notre service ?",  { minValue: 1, maxValue: 10, step: 1 }); 
     await readAllQuestions();
     await readQuestionById(2);  // ID corrigé pour correspondre à l'enquête
     await updateQuestion(2, { title: "Comment évalueriez-vous notre service ? (Mise à jour)" }); 
@@ -41,7 +41,7 @@ connectDB().then(async () => {
     await readAllQuestions();
 
     // Gestion des réponses
-    await createAnswer(2, 2 , { title: "Très bien" } );
+    await createAnswer(2, 2 , "Très bien" );
     await readAllAnswers();
     await readAnswerById(2);  // ID corrigé pour correspondre à la réponse
     await updateAnswer(2, { title: "Extrêmement satisfait" }); 

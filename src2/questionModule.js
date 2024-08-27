@@ -1,7 +1,7 @@
 const { connectDB } = require('./config/db');
 
 // Fonction pour créer une question
-async function createQuestion(idQuestion, surveyId, questionText, options) {
+async function createQuestion(idQuestion, surveyId, title, options) {
     try {
         const db = await connectDB();
 
@@ -27,7 +27,7 @@ async function createQuestion(idQuestion, surveyId, questionText, options) {
         const newQuestion = {
             idQuestion,
             surveyId,
-            questionText,
+            title,
             options
         };
         await db.collection('questions').insertOne(newQuestion);

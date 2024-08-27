@@ -1,7 +1,7 @@
 const { connectDB } = require('./config/db');
 
 // Fonction pour créer une nouvelle réponse
-async function createAnswer(idAnswer, questionId, options) {
+async function createAnswer(idAnswer, questionId, title) {
     try {
         const db = await connectDB();
 
@@ -20,7 +20,7 @@ async function createAnswer(idAnswer, questionId, options) {
         const newAnswer = {
             idAnswer,
             questionId,
-            options
+            title
         };
         await db.collection('answers').insertOne(newAnswer);
         console.log("Réponse créée avec succès:", newAnswer);
